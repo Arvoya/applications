@@ -69,4 +69,3 @@ Explain what tools are used.
 ## Change Log
 
 1.0.0
-# applications-backend
