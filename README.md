@@ -1,31 +1,72 @@
-# React + TypeScript + Vite
+# Applications Logger
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple web app that helps log job applications and track their progress.
+Designed for desktop only.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Requirements
 
-## Expanding the ESLint configuration
+For development, you will only need [Node](http://nodejs.org/) installed in your
+environment.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Install
 
-- Configure the top-level `parserOptions` property like this:
+    git clone git@github.com:Arvoya/applications.git
+    cd applications
+    npm install
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+### Configure app
+
+Along with this project, you will need to clone the [server](link) and follow the
+instructions to set it up.
+
+### Start & watch
+
+    npm run dev
+    npm start
+
+## Architecture
+
+Describe how the project is structured.
+
+```
+├── .eslintrc.cjs
+├── .gitignore
+├── README.md
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.cjs
+├── public
+│   └── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── Components
+│   │   ├── Form
+│   │   │   └── index.tsx
+│   │   ├── Lists
+│   │   ├── Lists.tsx
+│   │   └── Modal
+│   │       └── index.tsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── index.css
+│   ├── main.tsx
+│   ├── tests
+│   │   └── setup.ts
+│   └── vite-env.d.ts
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# applications
+### Languages & tools
+
+Explain what tools are used.
+
+## Change Log
+
+1.0.0
+# applications-backend
