@@ -3,11 +3,12 @@ import axios from 'axios';
 import { Table, TableScrollContainer, Select } from '@mantine/core';
 import ApplicationModal from './Modal/index.tsx';
 
-export default function Lists() {
+export default function Lists(props) {
   const [applications, setApplications] = useState([]);
   const [sortField, setSortField] = useState('jobTitle');
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+
 
   const fetchApplications = async () => {
     try {
@@ -42,6 +43,13 @@ export default function Lists() {
   useEffect(() => {
     fetchApplications();
   }, []);
+
+  useEffect(() => {
+    if (props.updatedValue) {
+      fetchApplications();
+      props.updatedFunc(false);
+    }
+  }, [props]);
 
   const sortedApplications = [...applications].sort((a, b) => a[sortField].localeCompare(b[sortField]));
 

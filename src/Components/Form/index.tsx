@@ -4,11 +4,11 @@ import { useForm } from '@mantine/form';
 import { DatePicker } from '@mantine/dates';
 import axios from 'axios';
 
-function JobApplicationForm() {
-  const [value, setValue] = useState<Date | null>(null);
+function JobApplicationForm(props) {
   const [active, setActive] = useState(0);
-  const [application, setApplication] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+
+
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -57,10 +57,9 @@ function JobApplicationForm() {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post('http://localhost:3000/applications', values);
-      console.log('Application submitted successfully:', response.data);
-      setApplication(values);
+      await axios.post('http://localhost:3000/applications', values);
       setSubmitted(true);
+      props.updated(true);
     } catch (error) {
       console.error('Error submitting application:', error);
     }
@@ -68,7 +67,6 @@ function JobApplicationForm() {
 
   const onSubmit = () => {
     const values = form.getValues();
-    setApplication(values);
     handleSubmit(values);
   };
 
@@ -76,7 +74,6 @@ function JobApplicationForm() {
     form.reset();
     setActive(0);
     setSubmitted(false);
-    setApplication(null);
   };
 
   return (
