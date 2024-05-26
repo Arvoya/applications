@@ -21,9 +21,7 @@ export default function ApplicationModal({ opened, onClose, application, onAppli
     try {
       await axios.delete(`http://localhost:3000/applications/${id}`);
       onClose();
-      if (onApplicationDeleted) {
-        onApplicationDeleted(id);
-      }
+      onApplicationDeleted(id);
     } catch (error) {
       console.error(error);
     }
@@ -33,9 +31,7 @@ export default function ApplicationModal({ opened, onClose, application, onAppli
     try {
       await axios.put(`http://localhost:3000/applications/${id}`, { status });
       onClose();
-      if (onApplicationUpdated) {
-        onApplicationUpdated(id, status);
-      }
+      onApplicationUpdated(id, status);
     } catch (error) {
       console.error(error);
     }
@@ -53,7 +49,7 @@ export default function ApplicationModal({ opened, onClose, application, onAppli
           <Select
             label="Update Status"
             value={status}
-            data={['Applied', 'Interviewing', 'Offered', 'Rejected']}
+            data={['Applied', 'Interviewing', 'Offered', 'Rejected', 'Getting Cold', 'Frozen']}
             onChange={setStatus}
           />
           <p><strong>Location:</strong> {application.location}</p>
@@ -68,7 +64,7 @@ export default function ApplicationModal({ opened, onClose, application, onAppli
         </form>
 
       ) : (
-        <p>No application selected</p>
+        null
       )}
     </Modal>
   );

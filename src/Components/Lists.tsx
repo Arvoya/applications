@@ -3,20 +3,52 @@ import axios from 'axios';
 import { Table, TableScrollContainer, Select } from '@mantine/core';
 import ApplicationModal from './Modal/index.tsx';
 
-export default function Lists() {
+export default function Lists(props) {
   const [applications, setApplications] = useState([]);
   const [sortField, setSortField] = useState('jobTitle');
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const fetchApplications = async () => {
+  const updateApplication = async (id) => {
     try {
-      const response = await axios.get('http://localhost:3000/applications');
-      setApplications(response.data);
+      await axios.put(`http://localhost:3000/applications/${id}`, { status: 'Getting Cold' });
+      fetchApplications();
     } catch (error) {
       console.error(error);
     }
   }
+
+  const fetchApplications = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/applications');
+      let applications = response.data.map(application => {
+        const dateApplied = new Date(application.dateApplied);
+        const now = new Date();
+        const oneWeekAgo = new Date();
+        const oneMonthAgo = new Date();
+        oneWeekAgo.setDate(now.getDate() - 7);
+        oneMonthAgo.setDate(now.getDate() - 30);
+
+
+        if (dateApplied < oneWeekAgo && application.status === 'Applied') {
+          updateApplication(application._id);
+          application.status = 'Getting Cold';
+        }
+
+        if (dateApplied < oneMonthAgo && application.status === 'Getting Cold') {
+          updateApplication(application._id);
+          application.status = 'Frozen';
+        }
+
+        return application;
+      });
+
+      setApplications(applications);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
 
   const handleApplicationDeleted = (id) => {
@@ -42,6 +74,13 @@ export default function Lists() {
   useEffect(() => {
     fetchApplications();
   }, []);
+
+  useEffect(() => {
+    if (props.updatedValue) {
+      fetchApplications();
+      props.updatedFunc(false);
+    }
+  }, [props]);
 
   const sortedApplications = [...applications].sort((a, b) => a[sortField].localeCompare(b[sortField]));
 
