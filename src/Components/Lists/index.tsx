@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Table, TableScrollContainer, Select } from '@mantine/core';
-import ApplicationModal from './Modal/index.tsx';
+import ApplicationModal from '../Modal';
 
 export default function Lists(props) {
   const [applications, setApplications] = useState([]);
@@ -21,7 +21,7 @@ export default function Lists(props) {
   const fetchApplications = async () => {
     try {
       const response = await axios.get('http://localhost:3000/applications');
-      let applications = response.data.map(application => {
+      const applications = response.data.map(application => {
         const dateApplied = new Date(application.dateApplied);
         const now = new Date();
         const oneWeekAgo = new Date();

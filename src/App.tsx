@@ -1,9 +1,8 @@
 import React from 'react'
-import './App.css'
 import JobApplicationForm from './Components/Form'
 import Lists from './Components/Lists'
 import { Tabs, rem } from '@mantine/core';
-import { IconForms, IconListDetails } from '@tabler/icons-react';
+import { IconForms, IconListDetails, IconSettings } from '@tabler/icons-react';
 
 
 function App() {
@@ -20,6 +19,9 @@ function App() {
           <Tabs.Tab value="applications" leftSection={<IconListDetails style={iconStyle} />}>
             Applications
           </Tabs.Tab>
+          <Tabs.Tab value='settings' leftSection={<IconSettings style={iconStyle} />} >
+            Settings
+          </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="forms">
@@ -27,6 +29,9 @@ function App() {
         </Tabs.Panel>
         <Tabs.Panel value="applications">
           <Lists updatedValue={updated} updatedFunc={setUpdated} />
+        </Tabs.Panel>
+        <Tabs.Panel value="settings">
+          <h1>Settings</h1>
         </Tabs.Panel>
 
       </Tabs>
