@@ -64,7 +64,10 @@ Describe how the project is structured.
 
 ### Languages & tools
 
-Explain what tools are used.
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+
 
 ## Change Log
 
