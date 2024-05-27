@@ -51,7 +51,12 @@ export default function Lists() {
         {displayData.jobTitle && <Table.Td>{application.jobTitle}</Table.Td>}
         {displayData.companyName && <Table.Td>{application.companyName}</Table.Td>}
         {displayData.dateApplied && <Table.Td>{formattedDate}</Table.Td>}
-        {displayData.applicationLink && <Table.Td><a href={application.applicationLink} target="_blank" rel="noopener noreferrer">Link</a></Table.Td>}
+        {displayData.applicationLink && <Table.Td>
+          {application.applicationLink !== ''
+            ? <a href={application.applicationLink} target="_blank" rel="noopener noreferrer">Link</a>
+            : <span>No Link Provided</span>
+          }
+        </Table.Td>}
         {displayData.status && <Table.Td>{application.status}</Table.Td>}
         {displayData.jobDescription && <Table.Td>{application.jobDescription}</Table.Td>}
         {displayData.location && <Table.Td>{application.location}</Table.Td>}
