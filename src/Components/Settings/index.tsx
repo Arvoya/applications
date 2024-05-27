@@ -22,22 +22,53 @@ export default function Settings() {
     jobReferenceID: '12345'
   };
 
+  const mockData2 = {
+    jobTitle: 'Example Job',
+    companyName: 'Tech Corp',
+    dateApplied: '01/01/2021',
+    applicationLink: 'http://example.com',
+    status: 'Rejected',
+    jobDescription: 'Develop and maintain software',
+    location: 'Remote',
+    notes: 'First round interview scheduled',
+    salaryRange: '$80,000 - $100,000',
+    contactName: 'John Doe',
+    contactEmail: 'john.doe@example.com',
+    jobReferenceID: '12345'
+  };
+
   return (
     <div style={{ maxWidth: '900px', margin: '20px', padding: '0 20px' }}>
       <h1>Settings</h1>
       <h3>Display Data</h3>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-        {Object.keys(displayData).map((key) => (
-          <div key={key}>
-            <Checkbox
-              radius="xl"
-              color="cyan"
-              label={key}
-              checked={displayData[key]}
-              onChange={() => dispatch(updateDisplayData(key))}
-            />
-          </div>
-        ))}
+        {Object.keys(displayData).map((key) => {
+          if (key === 'displayRejected') {
+            return (
+              <div style={{ marginLeft: '50px' }} key={key}>
+                <Checkbox
+                  radius="l"
+                  color="orange"
+                  label={key}
+                  checked={displayData[key]}
+                  onChange={() => dispatch(updateDisplayData(key))}
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div key={key} style={{ marginBottom: '10px' }}>
+                <Checkbox
+                  radius="xl"
+                  color="cyan"
+                  label={key}
+                  checked={displayData[key]}
+                  onChange={() => dispatch(updateDisplayData(key))}
+                />
+              </div>
+            );
+          }
+        })}
       </div>
       <h3>Example Table</h3>
       <TableScrollContainer h={550} minWidth={800} w={950} style={{ marginTop: '20px' }} >
@@ -73,9 +104,24 @@ export default function Settings() {
               {displayData.contactEmail && <Table.Td>{mockData.contactEmail}</Table.Td>}
               {displayData.jobReferenceID && <Table.Td>{mockData.jobReferenceID}</Table.Td>}
             </Table.Tr>
+            {displayData.displayRejected ?
+              <Table.Tr>
+                {displayData.jobTitle && <Table.Td>{mockData2.jobTitle}</Table.Td>}
+                {displayData.companyName && <Table.Td>{mockData2.companyName}</Table.Td>}
+                {displayData.dateApplied && <Table.Td>{mockData2.dateApplied}</Table.Td>}
+                {displayData.applicationLink && <Table.Td><a href={mockData2.applicationLink} target="_blank" rel="noopener noreferrer">Link</a></Table.Td>}
+                {displayData.status && <Table.Td>{mockData2.status}</Table.Td>}
+                {displayData.jobDescription && <Table.Td>{mockData2.jobDescription}</Table.Td>}
+                {displayData.location && <Table.Td>{mockData2.location}</Table.Td>}
+                {displayData.notes && <Table.Td>{mockData2.notes}</Table.Td>}
+                {displayData.salaryRange && <Table.Td>{mockData2.salaryRange}</Table.Td>}
+                {displayData.contactName && <Table.Td>{mockData2.contactName}</Table.Td>}
+                {displayData.contactEmail && <Table.Td>{mockData2.contactEmail}</Table.Td>}
+                {displayData.jobReferenceID && <Table.Td>{mockData2.jobReferenceID}</Table.Td>}
+              </Table.Tr> : null}
           </Table.Tbody>
         </Table>
       </TableScrollContainer>
-    </div>
+    </div >
   );
 }
