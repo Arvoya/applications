@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import JobApplicationForm from './Components/Form'
 import Lists from './Components/Lists'
+import Settings from './Components/Settings'
 import { Tabs, rem } from '@mantine/core';
 import { IconForms, IconListDetails, IconSettings } from '@tabler/icons-react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,9 +12,11 @@ function App() {
   const iconStyle = { width: rem(12), height: rem(12) };
   const loading = useSelector(state => state.application.isLoading);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchApplications());
   }, []);
+
   console.log('loading', loading);
 
   return (
@@ -38,7 +41,7 @@ function App() {
           <Lists />
         </Tabs.Panel>
         <Tabs.Panel value="settings">
-          <h1>Settings</h1>
+          <Settings />
         </Tabs.Panel>
       </Tabs >
     </>

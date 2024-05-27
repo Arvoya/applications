@@ -14,7 +14,7 @@ export const deleteApplication = createAction("DELETE_APPLICATION");
 export const setLoading = createAction("LOADING");
 export const setError = createAction("ERROR");
 
-export const applicationReducer = createReducer(initialState, (builder) => {
+const applicationReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setApplications, (state, action) => {
       state.applications = action.payload;
@@ -37,19 +37,29 @@ export const applicationReducer = createReducer(initialState, (builder) => {
 
 // async function
 export const fetchApplications = () => async (dispatch) => {
-  console.log("fetchApplications");
   dispatch(setLoading(true));
   try {
     const response = await axios.get("http://localhost:3000/applications");
     const applicationValues = response.data;
-    console.log("applicationValues", applicationValues);
     dispatch(setApplications(applicationValues));
-    dispatch(setLoading(false)); // Moved here
+    dispatch(setLoading(false));
   } catch (e) {
     dispatch(setError(e.toString()));
     console.log(e);
-  } finally {
-    console.log("Finally");
+  }
+};
+
+export const addNewApplication = (application) => async (dispatch) => {
+  console.log("addNewApplication", application._id);
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/applications",
+      application,
+    );
+    dispatch(addApplication(response.data));
+  } catch (e) {
+    dispatch(setError(e.toString()));
+    console.log(e);
   }
 };
 
