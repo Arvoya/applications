@@ -11,7 +11,6 @@ function JobApplicationForm() {
   const dispatch = useDispatch();
 
 
-
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -57,7 +56,7 @@ function JobApplicationForm() {
 
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = (values) => {
     try {
       dispatch(addNewApplication(values));
       setSubmitted(true);
@@ -115,6 +114,7 @@ function JobApplicationForm() {
           <DatePicker
             key={form.key('dateApplied')}
             {...form.getInputProps('dateApplied')}
+            onChange={(date) => form.setFieldValue('dateApplied', date.toISOString())}
           />
           <TextInput
             mt="md"

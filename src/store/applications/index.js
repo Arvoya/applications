@@ -24,12 +24,12 @@ const applicationReducer = createReducer(initialState, (builder) => {
     })
     .addCase(updateApplication, (state, action) => {
       state.applications = state.applications.map((application) =>
-        application.id === action.payload.id ? action.payload : application,
+        application._id === action.payload._id ? action.payload : application,
       );
     })
     .addCase(deleteApplication, (state, action) => {
       state.applications = state.applications.filter(
-        (application) => application.id !== action.payload.id,
+        (application) => application._id !== action.payload._id,
       );
     })
     .addCase(setLoading, (state, action) => {
@@ -44,39 +44,63 @@ export const fetchApplications = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const response = await axios.get("http://localhost:3000/applications");
-    const applicationValues = response.data;
+    let applicationValues = response.data;
+
     dispatch(setApplications(applicationValues));
+
+    const currentDate = new Date();
+
+    for (let application of applicationValues) {
+      const dateApplied = new Date(application.dateApplied);
+      const daysSinceApplied = Math.floor(
+        (currentDate - dateApplied) / (1000 * 60 * 60 * 24),
+      );
+
+      if (application.status === "Applied" && daysSinceApplied > 7) {
+        await dispatch(
+          updateExistingApplication({ ...application, status: "Getting Cold" }),
+        );
+      } else if (
+        application.status === "Getting Cold" &&
+        daysSinceApplied > 30
+      ) {
+        await dispatch(
+          updateExistingApplication({ ...application, status: "Frozen" }),
+        );
+      }
+    }
+
     dispatch(setLoading(false));
   } catch (e) {
     dispatch(setError(e.toString()));
-    console.log(e);
+    console.error(e);
   }
 };
 
 export const addNewApplication = (application) => async (dispatch) => {
-  console.log("addNewApplication", application._id);
   try {
-    const response = await axios.post(
+    let response = await axios.post(
       "http://localhost:3000/applications",
       application,
     );
+    // NOTE: Using response.data so the proper _id is set in the application object
     dispatch(addApplication(response.data));
   } catch (e) {
     dispatch(setError(e.toString()));
-    console.log(e);
+    console.error(e);
   }
 };
 
 export const updateExistingApplication = (application) => async (dispatch) => {
   try {
-    const response = await axios.put(
+    await axios.put(
       `http://localhost:3000/applications/${application._id}`,
       application,
     );
-    dispatch(updateApplication(response.data));
+    dispatch(updateApplication(application));
   } catch (e) {
     dispatch(setError(e.toString()));
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -86,7 +110,7 @@ export const deleteExistingApplication = (application) => async (dispatch) => {
     dispatch(deleteApplication(application));
   } catch (e) {
     dispatch(setError(e.toString()));
-    console.log(e);
+    console.error(e);
   }
 };
 

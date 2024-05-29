@@ -4,20 +4,18 @@ import Lists from './Components/Lists'
 import Settings from './Components/Settings'
 import { Tabs, rem } from '@mantine/core';
 import { IconForms, IconListDetails, IconSettings } from '@tabler/icons-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchApplications } from './store/applications';
 
 
 function App() {
   const iconStyle = { width: rem(12), height: rem(12) };
-  const loading = useSelector(state => state.application.isLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchApplications());
   }, []);
 
-  console.log('loading', loading);
 
   return (
     <>

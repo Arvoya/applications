@@ -1,27 +1,31 @@
+import { useEffect } from 'react';
 import { useState, useCallback } from 'react';
-import { LoadingOverlay } from '@mantine/core';
-import { Table, TableScrollContainer, Select } from '@mantine/core';
+import { Grid, LoadingOverlay } from '@mantine/core';
+import { Table, TableScrollContainer, Select, Input, TextInput } from '@mantine/core';
 import ApplicationModal from '../Modal';
 import { useSelector } from 'react-redux';
+import Fuse from 'fuse.js';
 
 export default function Lists() {
   const [sortField, setSortField] = useState('jobTitle');
   const [selectedApplication, setSelectedApplication] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const applications = useSelector(state => state.application.applications);
   const loading = useSelector(state => state.application.isLoading);
   const displayData = useSelector(state => state.displayData);
   const total = applications.length;
 
-  const handleApplicationDeleted = (id) => {
-    setApplications(applications.filter(application => application._id !== id));
-  };
+  useEffect(() => {
 
-  const handleApplicationUpdated = (id, updatedStatus) => {
-    setApplications(applications.map(application =>
-      application._id === id ? { ...application, status: updatedStatus } : application
-    ));
-  };
+  }, [applications]);
+
+  const fuse = new Fuse(applications, {
+    threshold: 0.4,
+    keys: ['jobTitle', 'companyName', 'status', 'jobDescription', 'location', 'notes', 'salaryRange', 'contactName', 'contactEmail', 'jobReferenceID'],
+    includeScore: true,
+  });
+
 
   const handleRowClick = useCallback((application, event) => {
     event.stopPropagation();
@@ -41,7 +45,20 @@ export default function Lists() {
     return displayData.displayRejected || application.status !== 'Rejected';
   });
 
-  const rows = filteredApplications.map((application) => {
+
+  let rows;
+
+  if (searchTerm.trim() !== '') {
+    let results = fuse.search(searchTerm);
+    if (!displayData.displayRejected) {
+      results = results.filter(({ item: application }) => application.status !== 'Rejected');
+    }
+    rows = results.map(({ item: application }) => createRow(application));
+  } else {
+    rows = filteredApplications.map((application) => createRow(application));
+  }
+
+  function createRow(application) {
     const date = new Date(application.dateApplied);
     const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 
@@ -67,27 +84,40 @@ export default function Lists() {
         {displayData.jobReferenceID && <Table.Td>{application.jobReferenceID}</Table.Td>}
       </Table.Tr>
     );
-  });
+  }
+
 
   return (
     <div style={{ maxWidth: '800px', margin: '20px ', padding: '0 20px' }}>
-      <ApplicationModal opened={modalOpen} onClose={handleModalClose} application={selectedApplication} onApplicationDeleted={handleApplicationDeleted} onApplicationUpdated={handleApplicationUpdated} />
+      <ApplicationModal opened={modalOpen} onClose={handleModalClose} application={selectedApplication} />
       <div>
         <h1>Applications</h1>
         <h2>Total: {total}</h2>
-        <Select
-          label="Sort by"
-          value={sortField}
-          style={{ marginBottom: 20, maxWidth: 150 }}
-          onChange={setSortField}
-          data={[
-            { value: 'jobTitle', label: 'Job Title' },
-            { value: 'companyName', label: 'Company Name' },
-            { value: 'dateApplied', label: 'Date Applied' },
-            { value: 'status', label: 'Status' },
-          ]}
-          allowDeselect={false}
-        />
+        <Grid>
+
+          <Grid.Col span={4}>
+            <Select
+              label="Sort by"
+              value={sortField}
+              onChange={setSortField}
+              data={[
+                { value: 'jobTitle', label: 'Job Title' },
+                { value: 'companyName', label: 'Company Name' },
+                { value: 'dateApplied', label: 'Date Applied' },
+                { value: 'status', label: 'Status' },
+              ]}
+              allowDeselect={false}
+            />
+          </Grid.Col>
+          <Grid.Col>
+            <Input.Wrapper label="Search" >
+              <TextInput
+                placeholder="Google"
+                onChange={() => { setSearchTerm(event.target.value) }}
+              />
+            </Input.Wrapper>
+          </Grid.Col>
+        </Grid>
         <TableScrollContainer h={550} minWidth={800} w={950} >
           <LoadingOverlay
             visible={loading}
