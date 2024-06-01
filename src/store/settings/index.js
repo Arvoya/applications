@@ -16,6 +16,7 @@ const initialState = localStorage.getItem("displayData")
       contactEmail: false,
       jobReferenceID: true,
       displayRejected: false,
+      displayFrozen: false,
     };
 
 export const updateDisplayData = createAction("UPDATE_DISPLAY_DATA");

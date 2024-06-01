@@ -15,6 +15,9 @@ export default function Lists() {
   const loading = useSelector(state => state.application.isLoading);
   const displayData = useSelector(state => state.displayData);
   const total = applications.length;
+  const rejected = applications.filter(application => application.status === 'Rejected').length;
+  const gettingCold = applications.filter(application => application.status === 'Getting Cold').length;
+  const frozen = applications.filter(application => application.status === 'Frozen').length;
 
   useEffect(() => {
 
@@ -92,10 +95,25 @@ export default function Lists() {
       <ApplicationModal opened={modalOpen} onClose={handleModalClose} application={selectedApplication} />
       <div>
         <h1>Applications</h1>
-        <h2>Total: {total}</h2>
+        <Grid>
+          <Grid.Col span={3}>
+            <h3>Total: {total}</h3>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <h3>Getting Cold: {gettingCold}</h3>
+          </Grid.Col>
+          {displayData.displayFrozen &&
+            <Grid.Col span={3}>
+              <h3>Frozen: {frozen}</h3>
+            </Grid.Col>
+          }
+          {displayData.displayRejected && <Grid.Col span={3}>
+            <h3>Rejected: {rejected}</h3>
+          </Grid.Col>}
+        </Grid>
         <Grid>
 
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Select
               label="Sort by"
               value={sortField}
@@ -109,7 +127,7 @@ export default function Lists() {
               allowDeselect={false}
             />
           </Grid.Col>
-          <Grid.Col>
+          <Grid.Col span={5}>
             <Input.Wrapper label="Search" >
               <TextInput
                 placeholder="Google"
