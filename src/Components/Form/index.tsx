@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { Stepper, Button, Group, TextInput, Code, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { DatePicker } from '@mantine/dates';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addNewApplication } from '../../store/applications';
 
-function JobApplicationForm(props) {
+function JobApplicationForm() {
   const [active, setActive] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-
+  const dispatch = useDispatch();
 
 
   const form = useForm({
@@ -55,11 +56,10 @@ function JobApplicationForm(props) {
 
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = (values) => {
     try {
-      await axios.post('http://localhost:3000/applications', values);
+      dispatch(addNewApplication(values));
       setSubmitted(true);
-      props.updated(true);
     } catch (error) {
       console.error('Error submitting application:', error);
     }
@@ -114,6 +114,7 @@ function JobApplicationForm(props) {
           <DatePicker
             key={form.key('dateApplied')}
             {...form.getInputProps('dateApplied')}
+            onChange={(date) => form.setFieldValue('dateApplied', date.toISOString())}
           />
           <TextInput
             mt="md"

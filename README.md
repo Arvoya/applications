@@ -64,7 +64,29 @@ Describe how the project is structured.
 
 ### Languages & tools
 
-Explain what tools are used.
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+
+## User Stories
+
+1. As a user, I want to be able to create a new log entry for each job application
+I submit, so that I can keep track of all my applications in one place.
+2. As a user, I want to be able to update each log entry with the status of the
+application (e.g., "submitted", "interview scheduled", "rejected"), so that I can
+easily see the progress of each application.
+3. As a user, I want to be able to add notes to each log entry, so that I can record
+important details about the application or the job.
+4. As a user, I want to be able to filter and sort my log entries, so that I can
+easily find specific applications.
+5. As a user, I want to be able to export my log entries to a CSV file, so that
+I can use the data in other applications or for reporting.
+6. As a user, I want the web app to automatically save my log entries, so that I
+don't lose any data if my browser crashes or if I forget to save.
+7. As a user, I want to be able to log in to the web app, so that I can access my
+log entries from any device.
+8. As a user, I want the web app to be responsive, so that I can use it on my phone
+or tablet as well as my computer.
 
 ## Change Log
 
