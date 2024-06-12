@@ -45,7 +45,13 @@ export default function Lists() {
   const sortedApplications = [...applications].sort((a, b) => a[sortField].localeCompare(b[sortField]));
 
   const filteredApplications = sortedApplications.filter((application) => {
-    return displayData.displayRejected || application.status !== 'Rejected';
+    if (!displayData.displayRejected && application.status === 'Rejected') {
+      return false;
+    }
+    if (!displayData.displayFrozen && application.status === 'Frozen') {
+      return false;
+    }
+    return true;
   });
 
 
@@ -56,8 +62,12 @@ export default function Lists() {
     if (!displayData.displayRejected) {
       results = results.filter(({ item: application }) => application.status !== 'Rejected');
     }
+    if (!displayData.displayFrozen) {
+      results = results.filter(({ item: application }) => application.status !== 'Frozen');
+    }
     rows = results.map(({ item: application }) => createRow(application));
-  } else {
+  }
+  else {
     rows = filteredApplications.map((application) => createRow(application));
   }
 
