@@ -62,7 +62,7 @@ export const fetchApplications = () => async (dispatch) => {
         );
       } else if (
         application.status === "Getting Cold" &&
-        daysSinceApplied > 30
+        daysSinceApplied > 14
       ) {
         await dispatch(
           updateExistingApplication({ ...application, status: "Frozen" }),

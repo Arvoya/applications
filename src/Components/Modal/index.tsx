@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useForm } from '@mantine/form';
 import { Modal, Button, Select } from '@mantine/core';
 import { useDispatch } from 'react-redux';
 import { updateExistingApplication, deleteExistingApplication } from '../../store/applications';
