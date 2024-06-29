@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useState, useCallback } from 'react';
-import { Grid, LoadingOverlay } from '@mantine/core';
+import { Grid, LoadingOverlay, Button } from '@mantine/core';
 import { Table, TableScrollContainer, Select, Input, TextInput } from '@mantine/core';
 import ApplicationModal from '../Modal';
 import { useSelector } from 'react-redux';
@@ -22,6 +22,35 @@ export default function Lists() {
   useEffect(() => {
 
   }, [applications]);
+  const handleExportToCSV = () => {
+    const headers = ['Job Title', 'Company Name', 'Date Applied', 'Application Link', 'Status', 'Job Description', 'Location', 'Notes', 'Salary Range', 'Contact Name', 'Contact Email', 'Job Reference ID'];
+    const data = applications.map(application => [
+      application.jobTitle,
+      application.companyName,
+      application.dateApplied,
+      application.applicationLink,
+      application.status,
+      application.jobDescription,
+      application.location,
+      application.notes,
+      application.salaryRange,
+      application.contactName,
+      application.contactEmail,
+      application.jobReferenceID
+    ]);
+
+    let csvContent = "data:text/csv;charset=utf-8,"
+      + headers.join(",") + "\n"
+      + data.map(e => e.join(",")).join("\n");
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "applications.csv");
+    document.body.appendChild(link); // Required for FF
+
+    link.click(); // This will download the data file named "applications.csv".
+  }
 
   const fuse = new Fuse(applications, {
     threshold: 0.4,
@@ -45,7 +74,13 @@ export default function Lists() {
   const sortedApplications = [...applications].sort((a, b) => a[sortField].localeCompare(b[sortField]));
 
   const filteredApplications = sortedApplications.filter((application) => {
-    return displayData.displayRejected || application.status !== 'Rejected';
+    if (!displayData.displayRejected && application.status === 'Rejected') {
+      return false;
+    }
+    if (!displayData.displayFrozen && application.status === 'Frozen') {
+      return false;
+    }
+    return true;
   });
 
 
@@ -56,8 +91,13 @@ export default function Lists() {
     if (!displayData.displayRejected) {
       results = results.filter(({ item: application }) => application.status !== 'Rejected');
     }
+    //NOTE: Option to display frozen applications or not on search
+    // if (!displayData.displayFrozen) {
+    //   results = results.filter(({ item: application }) => application.status !== 'Frozen');
+    // }
     rows = results.map(({ item: application }) => createRow(application));
-  } else {
+  }
+  else {
     rows = filteredApplications.map((application) => createRow(application));
   }
 
@@ -95,6 +135,7 @@ export default function Lists() {
       <ApplicationModal opened={modalOpen} onClose={handleModalClose} application={selectedApplication} />
       <div>
         <h1>Applications</h1>
+        <Button onClick={handleExportToCSV}>Export to CSV</Button>
         <Grid>
           <Grid.Col span={3}>
             <h3>Total: {total}</h3>

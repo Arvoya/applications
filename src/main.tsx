@@ -5,7 +5,7 @@ import App from './App.tsx'
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { MantineProvider } from '@mantine/core';
-import store from './store';
+import store from './store/index.js';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
