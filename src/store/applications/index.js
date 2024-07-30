@@ -43,7 +43,7 @@ const applicationReducer = createReducer(initialState, (builder) => {
 export const fetchApplications = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const response = await axios.get("http://localhost:3000/applications");
+    const response = await axios.get("http://localhost:3001/applications");
     let applicationValues = response.data;
 
     dispatch(setApplications(applicationValues));
@@ -80,7 +80,7 @@ export const fetchApplications = () => async (dispatch) => {
 export const addNewApplication = (application) => async (dispatch) => {
   try {
     let response = await axios.post(
-      "http://localhost:3000/applications",
+      "http://localhost:3001/applications",
       application,
     );
     // NOTE: Using response.data so the proper _id is set in the application object
@@ -94,7 +94,7 @@ export const addNewApplication = (application) => async (dispatch) => {
 export const updateExistingApplication = (application) => async (dispatch) => {
   try {
     await axios.put(
-      `http://localhost:3000/applications/${application._id}`,
+      `http://localhost:3001/applications/${application._id}`,
       application,
     );
     dispatch(updateApplication(application));
@@ -106,7 +106,7 @@ export const updateExistingApplication = (application) => async (dispatch) => {
 
 export const deleteExistingApplication = (application) => async (dispatch) => {
   try {
-    await axios.delete(`http://localhost:3000/applications/${application._id}`);
+    await axios.delete(`http://localhost:3001/applications/${application._id}`);
     dispatch(deleteApplication(application));
   } catch (e) {
     dispatch(setError(e.toString()));
